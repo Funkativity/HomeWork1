@@ -21,6 +21,7 @@ public class Main {
 		RegulatedMotor mA = new EV3MediumRegulatedMotor(MotorPort.A);
 		RegulatedMotor mB = new EV3MediumRegulatedMotor(MotorPort.B);
 		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
+		EV3UltrasonicSensor ultrasensor = new EV3UltrasonicSensor(SensorPort.S2);
 		mA.synchronizeWith(new RegulatedMotor[] {mB});
 		
 		//TODO: Move Forward 150 cm, stop, and beep
@@ -42,6 +43,8 @@ public class Main {
 		
 		//TODO: press button, stop when sonar reads 45 cm, beep
 		System.out.println("Moving forward into the great big world!");
+		
+		
 		
 		Sound.beep();
 		Button.ENTER.waitForPressAndRelease();
