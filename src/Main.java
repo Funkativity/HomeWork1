@@ -21,14 +21,19 @@ public class Main {
 		RegulatedMotor mA = new EV3MediumRegulatedMotor(MotorPort.A);
 		RegulatedMotor mB = new EV3MediumRegulatedMotor(MotorPort.B);
 		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
-		
 		mA.synchronizeWith(new RegulatedMotor[] {mB});
+		
 		//TODO: Move Forward 150 cm, stop, and beep
 		System.out.println("Moving forward into the great big world!");
-		double distanceToGo = 150.0;
+		double distanceToGo = 15.0;
 		double numRotations = ( distanceToGo / (radius * 2 * pi));
 		int angle = (int) (360.0 * numRotations);
-		mA.forward();
+		
+		mA.startSynchronization();
+		mA.rotate(angle);
+		mB.rotate(angle);
+		mA.endSynchronization();
+		
 		displacement = distanceToGo;
 		Sound.beep();
 		System.out.println("Waiting to proceed to next step");
@@ -41,6 +46,11 @@ public class Main {
 		Sound.beep();
 		Button.ENTER.waitForPressAndRelease();
 		//TODO: press button, go until hit wall, return to 45 cm from wall
+		
+		
+		
+		mA.close();
+		mB.close();
 	}
 	
 
