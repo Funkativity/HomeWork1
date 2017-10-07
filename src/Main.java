@@ -34,7 +34,8 @@ public class Main {
 		float distanceToGo = 1.50f;
 		double numRotations = ( distanceToGo / (RADIUS * 2 * PI));
 		int angle = (int) (360.0 * numRotations);
-		
+		mA.setSpeed(180);
+		mB.setSpeed(180);
 		mA.startSynchronization();
 		mA.rotate(angle, false);
 		mB.rotate(angle, false);
@@ -76,6 +77,8 @@ public class Main {
 		
 		//bump test
 		//move forward until hits the wall
+		mA.setSpeed(180);
+		mB.setSpeed(180);
 		mA.startSynchronization();
 		mB.forward();
 		mA.forward();
