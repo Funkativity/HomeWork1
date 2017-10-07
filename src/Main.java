@@ -53,7 +53,8 @@ public class Main {
 		while(sonarSample[0] > (.45 + SONAR_OFFSET)){
 			mA.forward();
 			mB.forward();
-			sonic.fetchSample(sonarSample, 0);
+			sonar.fetchSample(sonarSample, 0);
+			Delay.msDelay(750);
 		}
 		mA.stop();
 		mB.stop();
