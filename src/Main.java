@@ -34,7 +34,8 @@ public class Main {
 		float distanceToGo = 1.50f;
 		double numRotations = ( distanceToGo / (RADIUS * 2 * PI));
 		int angle = (int) (360.0 * numRotations);
-		
+		mA.setSpeed(180);
+		mB.setSpeed(180);
 		mA.startSynchronization();
 		mA.rotate(angle, false);
 		mB.rotate(angle, false);
@@ -76,7 +77,9 @@ public class Main {
 		
 		
 		//bump test
-		//move before 
+		//move forward until hits the wall
+		mA.setSpeed(180);
+		mB.setSpeed(180);
 		mA.startSynchronization();
 		mB.forward();
 		mA.forward();
@@ -91,30 +94,19 @@ public class Main {
 		mB.stop();
 		mA.stop();
 		mA.endSynchronization();
-		
-		//move back about 10cm, out of blanking distance
-		distanceToGo = .1f;
-		numRotations = ( distanceToGo / (RADIUS * 2 * PI));
-		angle = (int) (-360.0 * numRotations);
+
+		//move back till 45cm away from wall
 		mA.startSynchronization();
-		mA.rotate(angle, false);
-		mB.rotate(angle, false);
-		mA.endSynchronization();
-		
-		//move back until sonar says you good
-		mA.startSynchronization();
-		mA.backward();
 		mB.backward();
+		mA.backward();
 		mA.endSynchronization();
-		while(sonarSample[0] > distanceToWall){
+		while(sonarSample[0] < distanceToWall){
 			sonic.fetchSample(sonarSample, 0);
 		}
 		mA.startSynchronization();
 		mB.stop();
 		mA.stop();
 		mA.endSynchronization();
-		
-		
 		
 		mA.close();
 		mB.close();
