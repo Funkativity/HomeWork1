@@ -11,9 +11,9 @@ import lejos.utility.Delay;
 	
 public class Main {
 	
-	final static double RADIUS= .0225; //RADIUS of the tires in meters
+	final static double RADIUS= .0275; //RADIUS of the tires in meters
 	final static double PI = 3.141592653589793;
-	final static double SONAR_OFFSET = .03; //how far the sonar is from front of robut
+	final static float SONAR_OFFSET = .02f; //how far the sonar is from front of robut
 	static double displacement = 0.0;
 	
 	
@@ -22,18 +22,16 @@ public class Main {
 		RegulatedMotor mA = new EV3MediumRegulatedMotor(MotorPort.A);
 		RegulatedMotor mB = new EV3MediumRegulatedMotor(MotorPort.B);
 		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S2);
-		EV3UltrasonicSensor ultrasensor = new EV3UltrasonicSensor(SensorPort.S4);
+		EV3UltrasonicSensor ultraSensor = new EV3UltrasonicSensor(SensorPort.S4);
 
 		mA.synchronizeWith(new RegulatedMotor[] {mB});
-		
-		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S2);
-		EV3UltrasonicSensor ultraSensor = new EV3UltrasonicSensor(SensorPort.S4);
+
 		SensorMode touch = touchSensor.getTouchMode();
 		SensorMode sonic = (SensorMode) ultraSensor.getDistanceMode();
 		
 		//TODO: Move Forward 150 cm, stop, and beep
 		System.out.println("Moving forward into the great big world!");
-		double distanceToGo = .50;
+		float distanceToGo = 1.50f;
 		double numRotations = ( distanceToGo / (RADIUS * 2 * PI));
 		int angle = (int) (360.0 * numRotations);
 		
@@ -48,24 +46,26 @@ public class Main {
 		Button.ENTER.waitForPressAndRelease();
 		
 		
-		//TODO: press button, stop when sonar reads 45 cm, beep
+		
+		//SONAR TEST
 		System.out.println("\n\n\n\n\n\n\nSonar test!");
+		float distanceToWall = .45f + SONAR_OFFSET;
 		float[] sonarSample = new float[sonic.sampleSize()];
 		sonic.fetchSample(sonarSample, 0);
 		
-		mA.startSynchronization();
-		System.out.println("Initial Distance to wall: " + sonarSample[0] + SONAR_OFFSET);
-		if(sonarSample[0] > (.45 + SONAR_OFFSET)) {
+		System.out.println("Initial Distance to wall: " + (sonarSample[0] + SONAR_OFFSET));
+		if(sonarSample[0] > distanceToWall) {
+			mA.startSynchronization();
 			mA.forward();
 			mB.forward();
+			mA.endSynchronization();
 		}
-		while(sonarSample[0] > (.45 + SONAR_OFFSET)) {
+		while(sonarSample[0] > distanceToWall){
 			sonic.fetchSample(sonarSample, 0);
-			System.out.println("Distance to wall: " + sonarSample[0] + SONAR_OFFSET);
-			Delay.msDelay(750);
 		}
-		mA.stop();
+		mA.startSynchronization();
 		mB.stop();
+		mA.stop();
 		mA.endSynchronization();
 		
 		
@@ -74,7 +74,15 @@ public class Main {
 		
 		
 		
-		//TODO: press button, go until hit wall, return to 45 cm from wall
+		//bump test
+		mA.startSynchronization();
+		mB.forward();
+		mA.forward();
+		mA.endSynchronization();
+		float[] touchSample = new float[touch.sampleSize()];
+		while(touchSample[0]==0){
+			touch.fetchSample(touchSample, 0);
+		}
 		
 		
 		
