@@ -21,9 +21,12 @@ public class Main {
 		
 		RegulatedMotor mA = new EV3MediumRegulatedMotor(MotorPort.A);
 		RegulatedMotor mB = new EV3MediumRegulatedMotor(MotorPort.B);
-		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S1);
-		EV3UltrasonicSensor ultrasensor = new EV3UltrasonicSensor(SensorPort.S2);
 		mA.synchronizeWith(new RegulatedMotor[] {mB});
+		
+		EV3TouchSensor touchSensor = new EV3TouchSensor(SensorPort.S4);
+		EV3UltrasonicSensor ultraSensor = new EV3UltrasonicSensor(SensorPort.S2);
+		SensorMode touch = touchSensor.getTouchMode();
+		SensorMode sonic = (SensorMode) ultraSensor.getDistanceMode();
 		
 		//TODO: Move Forward 150 cm, stop, and beep
 		System.out.println("Moving forward into the great big world!");
@@ -44,14 +47,13 @@ public class Main {
 		
 		//TODO: press button, stop when sonar reads 45 cm, beep
 		System.out.println("Moving forward into the great big world!");
-		SensorMode sonar = touchSensor.getTouchMode();
-		float[] sonarSample = new float[sonar.sampleSize()];
+		float[] sonarSample = new float[sonic.sampleSize()];
 		
 		mA.startSynchronization();
 		while(sonarSample[0] > (.45 + SONAR_OFFSET)){
 			mA.forward();
 			mB.forward();
-			sonar.fetchSample(sonarSample, 0);
+			sonic.fetchSample(sonarSample, 0);
 		}
 		mA.stop();
 		mB.stop();
@@ -65,7 +67,7 @@ public class Main {
 		
 		
 		//TODO: press button, go until hit wall, return to 45 cm from wall
-		SensorMode touch = touchSensor.getTouchMode();
+		
 		
 		
 		mA.close();
