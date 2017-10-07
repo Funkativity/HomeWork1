@@ -52,6 +52,7 @@ public class Main {
 			mA.forward();
 			mB.forward();
 			sonar.fetchSample(sonarSample, 0);
+			Delay.msDelay(750);
 		}
 		mA.stop();
 		mB.stop();
