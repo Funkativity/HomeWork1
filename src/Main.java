@@ -13,7 +13,7 @@ public class Main {
 	
 	final static double RADIUS= .0275; //RADIUS of the tires in meters
 	final static double PI = 3.141592653589793;
-	final static float SONAR_OFFSET = .02f; //how far the sonar is from front of robut
+	final static float SONAR_OFFSET = .024f; //how far the sonar is from front of robut
 	static double displacement = 0.0;
 	
 	
@@ -29,8 +29,8 @@ public class Main {
 		SensorMode touch = touchSensor.getTouchMode();
 		SensorMode sonic = (SensorMode) ultraSensor.getDistanceMode();
 		
-		//TODO: Move Forward 150 cm, stop, and beep
-		System.out.println("Moving forward into the great big world!");
+		//Odometer test
+		System.out.println("Moving forward into the great big world, Odometer style!");
 		float distanceToGo = 1.50f;
 		double numRotations = ( distanceToGo / (RADIUS * 2 * PI));
 		int angle = (int) (360.0 * numRotations);
@@ -43,7 +43,7 @@ public class Main {
 		
 		displacement = distanceToGo;
 		Sound.beep();
-		System.out.println("Waiting to proceed to next step");
+		System.out.println("\n\n\n\n\n\nWaiting to proceed to next step");
 		Button.ENTER.waitForPressAndRelease();
 		
 		
@@ -54,14 +54,15 @@ public class Main {
 		float[] sonarSample = new float[sonic.sampleSize()];
 		sonic.fetchSample(sonarSample, 0);
 		
-		System.out.println("Initial Distance to wall: " + (sonarSample[0] + SONAR_OFFSET));
+//		System.out.println("Initial Distance to wall: " + (sonarSample[0] + SONAR_OFFSET));
 		if(sonarSample[0] > distanceToWall) {
 			mA.startSynchronization();
 			mA.forward();
 			mB.forward();
 			mA.endSynchronization();
 		}
-		while(sonarSample[0] > distanceToWall){
+		//.02 is the fudge factor, "it just works"
+		while(sonarSample[0] > (distanceToWall + .02)){
 			sonic.fetchSample(sonarSample, 0);
 		}
 		mA.startSynchronization();
@@ -69,10 +70,9 @@ public class Main {
 		mA.stop();
 		mA.endSynchronization();
 		
-		
 		Sound.beep();
+		System.out.println("\n\n\n\n\n\nWaiting to proceed to next step");
 		Button.ENTER.waitForPressAndRelease();
-		
 		
 		
 		
@@ -87,7 +87,7 @@ public class Main {
 		
 		//stop when you hit a wall
 		float[] touchSample = new float[touch.sampleSize()];
-		while(touchSample[0]==0){
+		while(touchSample[0] == 0){
 			touch.fetchSample(touchSample, 0);
 		}
 		mA.startSynchronization();
