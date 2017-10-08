@@ -62,7 +62,7 @@ public class Main {
 			mA.endSynchronization();
 		}
 		//.02 is the fudge factor, "it just works"
-		while(sonarSample[0] > (distanceToWall + .02)){
+		while(sonarSample[0] > (distanceToWall + .024)){
 			sonic.fetchSample(sonarSample, 0);
 		}
 		mA.startSynchronization();
@@ -91,15 +91,21 @@ public class Main {
 			touch.fetchSample(touchSample, 0);
 		}
 		mA.startSynchronization();
+		
 		mB.stop();
 		mA.stop();
 		mA.endSynchronization();
 
 		//move back till 45cm away from wall
 		mA.startSynchronization();
+		mA.rotate(-720, false);
+		mB.rotate(-720, false);
+		mA.endSynchronization();
+		mA.startSynchronization();
 		mB.backward();
 		mA.backward();
 		mA.endSynchronization();
+		sonic.fetchSample(sonarSample, 0);
 		while(sonarSample[0] < distanceToWall){
 			sonic.fetchSample(sonarSample, 0);
 		}
